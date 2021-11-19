@@ -1,0 +1,10 @@
+# This file tracks properties of this Flutter project.
+# Used by Flutter tool to assess capabilities and perform upgrades etc.
+#
+# This file should be version controlled and should not be manually edited.
+
+version:
+  revision: 2c443a36ce0809c0c92ce9ae97a57abbd308dd32
+  channel: wechat-2.5
+
+project_type: app
