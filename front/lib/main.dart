@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         // 本地信息相关
         BlocProvider<ProfileBloc>(create: (context) => ProfileBloc(ProfileInitialState())),
         // 导航相关
-        BlocProvider<RouterBloc>(create: (context) => RouterBloc(RouterState.kDefaultRouter)),
+        BlocProvider<RouterBloc>(create: (context) => RouterBloc(RouterState.fromStr(RouterDefineStr.kMainPage))),
         // 全局视图相关
         BlocProvider<ViewBloc>(create: (context) => ViewBloc(0),
         ),
@@ -50,8 +50,9 @@ class AppBody extends StatelessWidget {
             return BlocBuilder<RouterBloc, RouterState>(
                 builder: (context, router) {
                   final navigationBar = BlocProvider.of<ViewBloc>(context).navigationBar;
-                  final sideBar = makeSidebar(router);
-                  final body = makeBody(router);
+                  final routerStr = router.toString();
+                  final sideBar = PageHelper.getSideBar(routerStr)?.call(context);
+                  final body = PageHelper.getPage(routerStr)(context);
                   return PageContainer(navigationBar, sideBar, body);
                 }
             );
@@ -59,29 +60,4 @@ class AppBody extends StatelessWidget {
         });
   }
 
-  static Widget loginPage(context) {
-    return GestureDetector(
-      child: const Center(
-        child: Text("login page"),
-      ),
-      onTap: () {
-        final profileBloc = BlocProvider.of<ProfileBloc>(context);
-        profileBloc.add(ProfileLoginEvent("username", "password"));
-      },
-    );
-  }
-
-  static Widget? makeSidebar(RouterState state) {
-    return Container(
-      color: const Color(0xFF1F222C),
-      child: ListView(children: const [
-      ],),
-    );
-  }
-
-  static Widget makeBody(RouterState state) {
-    return Container(
-      color: Colors.white,
-    );
-  }
 }

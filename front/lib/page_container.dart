@@ -1,6 +1,10 @@
 
+import 'dart:js';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:workbench/global/router_bloc.dart';
+import 'package:workbench/pages/collection_page.dart';
 
 /////////////////// NavigationBar ///////////////////
 ////////
@@ -52,4 +56,29 @@ class _PageContainerState extends State<PageContainer> {
     );
   }
 
+}
+
+// Router Config
+typedef PageBuilder = Widget Function(BuildContext context);
+typedef SideBarBuilder = Widget? Function(BuildContext context);
+class PageHelper {
+  static Map<String, SideBarBuilder> sideBars = {
+    RouterDefineStr.kMainPage: (context) => getCollectionSideBar(context),
+  };
+
+  static Map<String, PageBuilder> pages = {
+    RouterDefineStr.kMainPage: (context) => getCollectionPage(context),
+  };
+
+
+  static SideBarBuilder? getSideBar(String routerStr) {
+    return sideBars[routerStr];
+  }
+
+  static PageBuilder getPage(String routerStr) {
+    var pb = pages[routerStr];
+    pb = pages[RouterDefineStr.kMainPage];
+    // 如果不存在则跳主页，主页一定存在
+    return pb!;
+  }
 }
