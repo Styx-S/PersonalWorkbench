@@ -39,7 +39,6 @@ class AppBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return BlocBuilder<ProfileBloc, ProfileState>(
         builder: (context, profileState) {
           // 未登录展示登录页

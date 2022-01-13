@@ -12,6 +12,11 @@ abstract class RouterEvent {
 
 }
 
+class RouterJumpEvent extends RouterEvent {
+  RouterState newRouteState;
+  RouterJumpEvent(this.newRouteState);
+}
+
 class RouterState {
   final String? category;   // 一级分类
   final String? key;        // 二级分类
@@ -75,11 +80,17 @@ class RouterState {
 }
 
 class RouterBloc extends Bloc<RouterEvent, RouterState> {
-  RouterBloc(RouterState initialState) : super(initialState);
+  RouterBloc(RouterState initialState) : super(initialState) {
+    on<RouterJumpEvent>(_handleRoute);
+  }
+
+  void _handleRoute(RouterJumpEvent jumpEvent, Emitter<RouterState> emit) async {
+    emit(jumpEvent.newRouteState);
+  }
 }
 
 class RouterDefineStr {
+  // static const kLoginPage = "/login";// 不需要登录页的url，通过profileBloc登出自动跳转
   static const kMainPage = "/";
-  static const kLoginPage = "/login";
   static const kNotFoundPage = "/404";
 }
