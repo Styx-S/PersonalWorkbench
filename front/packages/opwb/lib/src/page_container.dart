@@ -2,8 +2,9 @@ import 'dart:js';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:workbench/global/router_bloc.dart';
-import 'package:workbench/pages/collection_page/collection_page.dart';
+import 'package:opwb/src/pages/collection_page/collection_page.dart';
+
+import 'global/router_bloc.dart';
 
 /////////////////// NavigationBar ///////////////////
 ////////

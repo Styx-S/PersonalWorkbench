@@ -1,9 +1,9 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:workbench/global/profile_bloc.dart';
-import 'package:workbench/global/router_bloc.dart';
-import 'package:workbench/views/navigation_bar.dart';
-import 'package:workbench/page_container.dart' as wp;
+import 'package:opwb/src/global/profile_bloc.dart';
+import 'package:opwb/src/global/router_bloc.dart';
+import 'package:opwb/src/views/navigation_bar.dart';
 
 abstract class ViewBlocEvent {}
 

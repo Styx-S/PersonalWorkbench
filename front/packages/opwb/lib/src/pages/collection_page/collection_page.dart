@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:workbench/pages/collection_page/collection_bloc.dart';
-import 'package:workbench/views/grid_layout.dart';
+import 'package:opwb/src/views/grid_layout.dart';
+
+import 'collection_bloc.dart';
 
 Widget getCollectionPage(BuildContext context) {
   return Container(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:workbench/global/profile_bloc.dart';
+import 'package:opwb/src/global/profile_bloc.dart';
 
 class LoginPage extends StatefulWidget {
   @override
