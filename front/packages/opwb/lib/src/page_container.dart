@@ -60,7 +60,7 @@ class _PageContainerState extends State<PageContainer> {
   }
 }
 
-// Router Config
+// router Config
 typedef PageBuilder = Widget Function(BuildContext context);
 typedef SideBarBuilder = Widget? Function(BuildContext context);
 

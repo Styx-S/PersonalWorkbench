@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:workbench/route/router_define.dart';
-import 'package:workbench/route/router_param.dart';
+import 'package:workbench/Foundations/foundations.dart';
 
 class NotFoundPageConfig extends RouterPageConfig {
   static const tag = "/404";
 
   @override
+  String get routerPath => tag;
+
+  @override
   Widget routerEntry(PWBRouteParam param) {
     return _NotFoundPage();
+  }
+
+  static PWBRouteParam makeParam(String? rawUrl) {
+    return RouterDefine.getDefine().makeRouterParam(tag: tag, raw: rawUrl);
   }
   
 }

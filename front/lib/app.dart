@@ -1,9 +1,10 @@
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:workbench/route/router_param.dart';
 
-class PWBRouteInfoDelegate extends RouterDelegate<PWBRouteParam> {
+import 'Foundations/foundations.dart';
+
+class PWBRouterDelegate extends RouterDelegate<PWBRouteParam> {
 
   final List<PWBRouteParam> _routeStack = [];
   final List<VoidCallback> _listeners = [];
@@ -19,15 +20,37 @@ class PWBRouteInfoDelegate extends RouterDelegate<PWBRouteParam> {
   }
 
   void notifyListeners() {
-    print("notify listeners, count: ${_listeners.length}");
     for (final l in _listeners) {
       l();
     }
   }
 
+  PWBRouterDelegate of(BuildContext context) {
+    final delegate = Router.of(context).routerDelegate;
+    assert (!(delegate is PWBRouterDelegate));
+    return delegate as PWBRouterDelegate;
+  }
+
+  void pushPage(BuildContext context, PWBRouteParam param) {
+    final info = RouteInformation(location: param.pageName);
+    Router.of(context).routeInformationProvider!.routerReportsNewRouteInformation(info);
+    _routeStack.add(param);
+    notifyListeners();
+  }
+
+  bool popPage() {
+    if (_routeStack.length <= 1) {
+      return false;
+    }
+    _routeStack.removeLast();
+    notifyListeners();
+    return true;
+  }
+
 
   @override
   Widget build(BuildContext context) {
+    print("build route ${_routeStack}");
     if (currentConfiguration == null) {
       return Container(
         child: Align(
@@ -35,7 +58,9 @@ class PWBRouteInfoDelegate extends RouterDelegate<PWBRouteParam> {
         ),
       );
     }
-    return currentConfiguration!.getPage();
+    return Scaffold(
+      body: currentConfiguration!.getPage(),
+    );
   }
 
   @override
@@ -52,6 +77,7 @@ class PWBRouteInfoDelegate extends RouterDelegate<PWBRouteParam> {
   @override
   Future<void> setNewRoutePath(PWBRouteParam param) {
     print("new route: ${param.pageName}");
+    _routeStack.clear();
     _routeStack.add(param);
     notifyListeners();
     return SynchronousFuture<void>(null);
