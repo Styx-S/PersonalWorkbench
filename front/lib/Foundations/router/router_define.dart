@@ -26,7 +26,8 @@ typedef Widget RouterHandlerFunc(PWBRouteParam param);
 typedef PWBRouteParam RouterRedirectFunc(RouteInformation info);
 
 abstract class RouterPageConfig {
-  String get routerPath;
+  String get routerPath;      // 获取页面对应路径
+  bool get needLogin => true; // 是否需要登录才能访问
   Widget routerEntry(PWBRouteParam param);
 }
 
@@ -44,9 +45,14 @@ class PWBRouteParam<T> {
     this.rawInfo,
   });
 
+  RouterPageConfig getConfig() {
+    assert(RouterDefine.getDefine()._routerMap[pageName] != null);
+    return RouterDefine.getDefine()._routerMap[pageName]!;
+  }
+
   Widget getPage() {
     assert(RouterDefine.getDefine()._routerMap[pageName] != null);
-    return RouterDefine.getDefine()._routerMap[pageName]!.routerEntry(this);
+    return getConfig().routerEntry(this);
   }
 
   String getRawUrl() {
@@ -60,7 +66,7 @@ class PWBRouteInfoParser extends RouteInformationParser<PWBRouteParam> {
   @override
   Future<PWBRouteParam> parseRouteInformation(RouteInformation routeInformation) async {
 
-    final make404 = (){
+    PWBRouteParam make404 (){
       print("redirect to 404");
       assert(RouterDefine.getDefine()._notFoundFunc != null);
       return RouterDefine.getDefine()._notFoundFunc!(routeInformation);

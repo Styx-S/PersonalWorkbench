@@ -46,16 +46,26 @@ class PWBResponderContext extends InheritedWidget {
 
 
 class PWBResponder extends StatefulWidget {
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final Widget child;
-  final bool clickable;
+  final bool clickable;   // 是否能点击
+  final bool hoverable;   // 是否会传递hover态给子Child
 
   const PWBResponder({
     Key? key,
-    required this.onTap,
+    this.onTap,
     required this.child,
     this.clickable = true,
+    this.hoverable = true,
   }) : super(key: key);
+
+  PWBResponder.builder({
+    Key? key,
+    this.onTap,
+    required WidgetBuilder builder,
+    this.clickable = true,
+    this.hoverable = true,
+  }) : child = Builder(builder: builder) , super(key: key);
 
   @override
   State<StatefulWidget> createState() => _PWBResponderState();
@@ -75,9 +85,9 @@ class _PWBResponderState extends State<PWBResponder> {
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
-      onHover: (_) => onStateChange(PWBResponderState.hover),
+      onHover: (_) => widget.hoverable ? onStateChange(PWBResponderState.hover) : null,
       onExit: (_) => onStateChange(PWBResponderState.normal),
-      cursor: SystemMouseCursors.click,
+      cursor: widget.hoverable ? SystemMouseCursors.click : MouseCursor.defer,
       child: GestureDetector(
         onTapUp: (_) => onStateChange(PWBResponderState.normal),
         onTapDown: (_) => onStateChange(PWBResponderState.press),

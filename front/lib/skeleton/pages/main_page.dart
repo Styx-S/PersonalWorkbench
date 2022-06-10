@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:workbench/Foundations/foundations.dart';
+import 'package:workbench/page_debug/debug_utils.dart';
 
 class MainPageConfig extends RouterPageConfig {
 
@@ -21,13 +22,13 @@ class MainPageConfig extends RouterPageConfig {
 class _MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
+    final debugHandler = DebugGestureHandler(context);
     return Column(
       children: [
-        PWBNavigationBar(
+        PWBHorizontalNavigationBar(
           logoText: "PersonalWorkbench",
-          logoTap: (){
-
-          },
+          logoTap: debugHandler.onTap,
           onNavChanged: <String>(id){
           print("${id}");
         },

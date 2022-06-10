@@ -13,6 +13,7 @@ extension PWBSiteThemeContextExt on BuildContext {
   }
   PWBSiteColor get lightColor => PWBSiteTheme.lightColor;
   PWBSiteColor get darkColor => PWBSiteTheme.darkColor;
+  PWBSiteColor get navColor => PWBSiteTheme.darkColor; // 导航栏背景相当于是深色模式，所以这里获取的其他都要用深色对应的
 }
 
 abstract class PWBSiteColor {

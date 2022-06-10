@@ -1,5 +1,7 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:workbench/skeleton/logic/config/global_site_model.dart';
 import 'package:workbench/skeleton/pages/debug_page.dart';
 import 'package:workbench/skeleton/pages/main_page.dart';
 import 'package:workbench/skeleton/pages/not_found_page.dart';
@@ -7,10 +9,20 @@ import 'Foundations/foundations.dart';
 import 'app.dart';
 
 void main() {
-  runApp(App());
+  runApp(App.obtainRootWidget());
 }
 
 class App extends StatefulWidget {
+  const App({Key? key}) : super(key: key);
+
+  static Widget obtainRootWidget() {
+    return const ProviderScope(child: PWBSiteConfigWidget(
+      siteConfig: PWBSiteConfig(
+        siteName: "PersonalWorkbench",
+      ),
+      child: App(),
+    ));
+  }
 
   @override
   State<StatefulWidget> createState() => _AppState();
@@ -48,17 +60,20 @@ class _AppState extends State<App> {
   
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-        theme: ThemeData(
-          brightness: Brightness.light,
-        ),
-        darkTheme: ThemeData(
-          brightness: Brightness.dark,
-        ),
-        themeMode: null,
-        title: "Workbench",
-        routeInformationParser: parser,
-        routerDelegate: delegate);
+    return GlobalSiteModel.makeConfigBuilder((context, config) {
+      return MaterialApp.router(
+          theme: ThemeData(
+            brightness: Brightness.light,
+          ),
+          darkTheme: ThemeData(
+            brightness: Brightness.dark,
+          ),
+          themeMode: null,
+          title: config.siteName,
+          routeInformationParser: parser,
+          routerDelegate: delegate
+      );
+    });
   }
 
 }

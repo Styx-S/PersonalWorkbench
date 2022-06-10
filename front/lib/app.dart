@@ -1,6 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:workbench/skeleton/logic/account/global_account_model.dart';
+import 'package:workbench/skeleton/pages/login_page.dart';
 
 import 'Foundations/foundations.dart';
 
@@ -25,15 +27,13 @@ class PWBRouterDelegate extends RouterDelegate<PWBRouteParam> {
     }
   }
 
-  PWBRouterDelegate of(BuildContext context) {
+  static PWBRouterDelegate of(BuildContext context) {
     final delegate = Router.of(context).routerDelegate;
-    assert (!(delegate is PWBRouterDelegate));
+    assert (delegate is PWBRouterDelegate);
     return delegate as PWBRouterDelegate;
   }
 
   void pushPage(BuildContext context, PWBRouteParam param) {
-    final info = RouteInformation(location: param.pageName);
-    Router.of(context).routeInformationProvider!.routerReportsNewRouteInformation(info);
     _routeStack.add(param);
     notifyListeners();
   }
@@ -50,17 +50,20 @@ class PWBRouterDelegate extends RouterDelegate<PWBRouteParam> {
 
   @override
   Widget build(BuildContext context) {
-    print("build route ${_routeStack}");
-    if (currentConfiguration == null) {
-      return Container(
-        child: Align(
-          child: Text("加载中..."),
-        ),
-      );
-    }
-    return Scaffold(
-      body: currentConfiguration!.getPage(),
-    );
+    return Consumer(
+        builder: (context, ref, child) {
+          if (currentConfiguration == null) {
+            return Container();
+          }
+          final pageConfig = currentConfiguration!.getConfig();
+          if (pageConfig.needLogin && !ref.watch(GlobalAccountModel.provider).isLogin) {
+            return const LoginPage();
+          }
+          return Scaffold(
+            body: currentConfiguration!.getPage(),
+          );
+    });
+
   }
 
   @override
