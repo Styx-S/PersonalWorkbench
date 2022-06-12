@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:workbench/skeleton/logic/config/global_site_model.dart';
-import 'package:workbench/skeleton/pages/debug_page.dart';
+import 'package:workbench/page_debug/debug_page.dart';
 import 'package:workbench/skeleton/pages/main_page.dart';
 import 'package:workbench/skeleton/pages/not_found_page.dart';
 import 'Foundations/foundations.dart';

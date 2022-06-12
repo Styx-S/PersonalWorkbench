@@ -1,7 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:workbench/app.dart';
-import 'package:workbench/skeleton/pages/debug_page.dart';
+import 'package:workbench/page_debug/debug_page.dart';
 
 class DebugGestureHandler {
   final BuildContext context;
