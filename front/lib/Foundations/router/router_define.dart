@@ -59,6 +59,11 @@ class PWBRouteParam<T> {
     return rawInfo ?? pageName;
   }
 
+  @override
+  String toString() {
+    return "$runtimeType<url: $pageName>";
+  }
+
 }
 
 

@@ -13,12 +13,13 @@ typedef OnNavChangedT2 = void Function<T>(T id);
 
 
 
-class PWBHorizontalNavigationBar extends StatefulWidget {
+class PWBHorizontalNavigationBar<T> extends StatefulWidget {
   final OnNavChangedT2? onNavChanged;
   final List<PWBNavigationItem>? items;
   final String? logoText;
   final VoidCallback? logoTap;
   final bool logoHoverable;
+  final T? defaultSelectItemId;
 
   const PWBHorizontalNavigationBar({
     Key? key,
@@ -27,6 +28,7 @@ class PWBHorizontalNavigationBar extends StatefulWidget {
     this.logoText,
     this.logoTap,
     this.logoHoverable = false,
+    this.defaultSelectItemId,
   }) : super(key: key);
 
   @override
@@ -40,6 +42,7 @@ class _PWBHorizontalNavigationBarState<T> extends State<PWBHorizontalNavigationB
 
   @override
   Widget build(BuildContext context) {
+    currSelectItemId ??= widget.defaultSelectItemId;
     currSelectItemId ??= widget.items?.first.id;
 
     return Container(
@@ -60,10 +63,13 @@ class _PWBHorizontalNavigationBarState<T> extends State<PWBHorizontalNavigationB
               padding: const EdgeInsets.only(left: 2, right: 2),
               child: PWBNavigationItemWidget(
                 item: widget.items![index],
-                canSelect: index != currSelectItemId,
+                isCurSelect: widget.items![index].id == currSelectItemId,
                 onNavChanged: (item){
                   widget.onNavChanged?.call(item.id);
                   item.onSelect?.call();
+                  setState((){
+                    currSelectItemId = item.id;
+                  });
                 },
                 textColor: context.colors.navForegroundColor,
                 hoverColor: context.navColor.hoverColor,
@@ -85,7 +91,7 @@ class PWBNavigationItemWidget extends StatelessWidget {
   final Color? textHoverColor;
   final Color? hoverColor;
   final Color? pressColor;
-  final bool canSelect;
+  final bool isCurSelect;
   final EdgeInsets? margin;
   final double fontSize;
   const PWBNavigationItemWidget({
@@ -96,7 +102,7 @@ class PWBNavigationItemWidget extends StatelessWidget {
     this.textHoverColor,
     this.hoverColor,
     this.pressColor,
-    this.canSelect = true,
+    this.isCurSelect = true,
     this.margin = const EdgeInsets.only(left: 12, right: 12, top: 6, bottom: 6),
     this.fontSize = 14,
   }) : super(key: key);
@@ -104,7 +110,8 @@ class PWBNavigationItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PWBResponder(
-      clickable: canSelect,
+      clickable: !isCurSelect,
+      hoverable: !isCurSelect,
       onTap: () => onNavChanged?.call(item),
       child: Builder(
         builder: (context){
@@ -120,6 +127,7 @@ class PWBNavigationItemWidget extends StatelessWidget {
                 item.title,
                 style: TextStyle(
                   fontSize: fontSize,
+                  fontWeight: isCurSelect ? FontWeight.w700 : FontWeight.w400,
                   color: rCtx.on(normal: textColor, hover: textHoverColor),
                 ),
               ),
@@ -170,13 +178,14 @@ class PWBNavigationLogoWidget extends StatelessWidget {
 
 }
 
-class PWBVerticalNavigationBar extends StatefulWidget {
+class PWBVerticalNavigationBar<T> extends StatefulWidget {
   final OnNavChangedT2 ? onNavChanged;
   final List<PWBNavigationItem>? items;
   final String? logoText;
   final VoidCallback? logoTap;
   final bool logoHoverable;
   final Widget? trailWidget;
+  final T? defaultSelectItemId;
 
   const PWBVerticalNavigationBar({
     Key? key,
@@ -186,6 +195,7 @@ class PWBVerticalNavigationBar extends StatefulWidget {
     this.logoTap,
     this.logoHoverable = false,
     this.trailWidget,
+    this.defaultSelectItemId,
   }) : super(key: key);
   @override
   State<StatefulWidget> createState() => _PWBVerticalNavigationBarState();
@@ -196,9 +206,14 @@ class _PWBVerticalNavigationBarState<T> extends State<PWBVerticalNavigationBar> 
 
   T? currSelectItemId;
 
+
+
   @override
   Widget build(BuildContext context) {
+    currSelectItemId ??= widget.defaultSelectItemId;
+    currSelectItemId ??= widget.items?.first.id;
     bool hasTrail = widget.trailWidget != null;
+    print("${currSelectItemId}");
 
     return Container(
       color: context.colors.navBackgroundColor,
@@ -229,10 +244,13 @@ class _PWBVerticalNavigationBarState<T> extends State<PWBVerticalNavigationBar> 
                 children: [
                   Expanded(child: PWBNavigationItemWidget(
                     item: widget.items![index],
-                    canSelect: index != currSelectItemId,
+                    isCurSelect: widget.items![index].id == currSelectItemId,
                     onNavChanged: (item){
                       widget.onNavChanged?.call(item.id);
                       item.onSelect?.call();
+                      setState((){
+                        currSelectItemId = item.id;
+                      });
                     },
                     textColor: context.colors.navForegroundColor,
                     hoverColor: context.navColor.hoverColor,

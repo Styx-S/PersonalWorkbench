@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:workbench/Foundations/foundations.dart';
 import 'package:workbench/app.dart';
 
+import '../skeleton/pages/main_page.dart';
+
 class DebugPageConfig extends RouterPageConfig {
 
   static const tag = "/debug";
@@ -52,7 +54,7 @@ class _DebugPageState extends State<_DebugPage> {
       verticalItems: itemHelper.items,
       verticalTitleTrailWidget: PWBResponder.builder(
         onTap: (){
-          PWBRouterDelegate.of(context).popPage();
+          PWBRouterDelegate.of(context).pushPage(context, MainPageConfig.makeParam(), replace: true, useExist: true);
         },
         builder: (context) {
             return Icon(

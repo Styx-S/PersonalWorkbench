@@ -33,8 +33,23 @@ class PWBRouterDelegate extends RouterDelegate<PWBRouteParam> {
     return delegate as PWBRouterDelegate;
   }
 
-  void pushPage(BuildContext context, PWBRouteParam param) {
+  void pushPage(BuildContext context, PWBRouteParam param, {
+    bool replace = false, // 是否干掉当前页面（产生跳转的效果）
+    useExist = false      // 是否是用栈中已存在的同名页面
+  }) {
+    PWBLogger.logD("before ${_routeStack.toString()}", kModuleRouter);
+    if (replace) {
+      _routeStack.removeLast();
+    }
+    if (useExist) {
+      for (int idx = _routeStack.length - 1; idx >= 0; idx--) {
+        if (_routeStack[idx].pageName == param.pageName) {
+          param = _routeStack.removeAt(idx);
+        }
+      }
+    }
     _routeStack.add(param);
+    PWBLogger.logD("after ${_routeStack.toString()}", kModuleRouter);
     notifyListeners();
   }
 
@@ -57,7 +72,7 @@ class PWBRouterDelegate extends RouterDelegate<PWBRouteParam> {
           }
           final pageConfig = currentConfiguration!.getConfig();
           if (pageConfig.needLogin && !ref.watch(GlobalAccountModel.provider).isLogin) {
-            return const LoginPage();
+            return const Scaffold(body: LoginPage());
           }
           return Scaffold(
             body: currentConfiguration!.getPage(),
