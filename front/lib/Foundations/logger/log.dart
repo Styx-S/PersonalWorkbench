@@ -11,7 +11,7 @@ class PWBLogger {
   static get logger => _instance;
   PWBLogger._();
 
-  final formatter = DateFormat("yy-MM-dd HH:mm:ss.ms");
+  final formatter = intl.DateFormat("yy-MM-dd HH:mm:ss.ms");
 
   static void logD(String content, String? module) {
     logPWB(LogLevel.debug, content, module);

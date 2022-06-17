@@ -11,14 +11,13 @@ class PWBNavigationItem<T> {
 typedef OnNavChangedT1<T> = void Function(T id);
 typedef OnNavChangedT2 = void Function<T>(T id);
 
-
-
 class PWBHorizontalNavigationBar<T> extends StatefulWidget {
   final OnNavChangedT2? onNavChanged;
   final List<PWBNavigationItem>? items;
   final String? logoText;
   final VoidCallback? logoTap;
   final bool logoHoverable;
+  final bool selectInNavBar;
   final T? defaultSelectItemId;
 
   const PWBHorizontalNavigationBar({
@@ -28,6 +27,7 @@ class PWBHorizontalNavigationBar<T> extends StatefulWidget {
     this.logoText,
     this.logoTap,
     this.logoHoverable = false,
+    this.selectInNavBar = true,
     this.defaultSelectItemId,
   }) : super(key: key);
 
@@ -42,8 +42,10 @@ class _PWBHorizontalNavigationBarState<T> extends State<PWBHorizontalNavigationB
 
   @override
   Widget build(BuildContext context) {
-    currSelectItemId ??= widget.defaultSelectItemId;
-    currSelectItemId ??= widget.items?.first.id;
+    if (widget.selectInNavBar) {
+      currSelectItemId ??= widget.defaultSelectItemId;
+      currSelectItemId ??= widget.items?.first.id;
+    }
 
     return Container(
       color:  context.colors.navBackgroundColor,
@@ -167,7 +169,7 @@ class PWBNavigationLogoWidget extends StatelessWidget {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w700,
-                color: PWBResponderContext.of(context).on(normal: context.colors.navForegroundColor, hover: PWBSiteTheme.darkColor.hoverColor) ,
+                color: PWBResponderContext.of(context).on(normal: context.colors.navForegroundColor) ,
               ),
             );
           }
@@ -185,6 +187,7 @@ class PWBVerticalNavigationBar<T> extends StatefulWidget {
   final VoidCallback? logoTap;
   final bool logoHoverable;
   final Widget? trailWidget;
+  final bool selectInNavBar;
   final T? defaultSelectItemId;
 
   const PWBVerticalNavigationBar({
@@ -195,6 +198,7 @@ class PWBVerticalNavigationBar<T> extends StatefulWidget {
     this.logoTap,
     this.logoHoverable = false,
     this.trailWidget,
+    this.selectInNavBar = true,
     this.defaultSelectItemId,
   }) : super(key: key);
   @override
@@ -210,10 +214,11 @@ class _PWBVerticalNavigationBarState<T> extends State<PWBVerticalNavigationBar> 
 
   @override
   Widget build(BuildContext context) {
-    currSelectItemId ??= widget.defaultSelectItemId;
-    currSelectItemId ??= widget.items?.first.id;
+    if (widget.selectInNavBar) {
+      currSelectItemId ??= widget.defaultSelectItemId;
+      currSelectItemId ??= widget.items?.first.id;
+    }
     bool hasTrail = widget.trailWidget != null;
-    print("${currSelectItemId}");
 
     return Container(
       color: context.colors.navBackgroundColor,

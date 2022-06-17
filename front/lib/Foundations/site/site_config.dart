@@ -3,6 +3,8 @@ part of foundations;
 class PWBSiteConfig {
   final String siteName;
 
+  static const String host = "";
+  static const int port = 32359;
 
   const PWBSiteConfig({
     required this.siteName,

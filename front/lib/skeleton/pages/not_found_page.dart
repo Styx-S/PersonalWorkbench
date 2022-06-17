@@ -6,6 +6,9 @@ class NotFoundPageConfig extends RouterPageConfig {
   static const tag = "/404";
 
   @override
+  String get title => "404";
+
+  @override
   String get routerPath => tag;
 
   @override

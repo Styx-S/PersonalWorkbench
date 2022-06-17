@@ -27,6 +27,7 @@ typedef PWBRouteParam RouterRedirectFunc(RouteInformation info);
 
 abstract class RouterPageConfig {
   String get routerPath;      // 获取页面对应路径
+  String get title => "";
   bool get needLogin => true; // 是否需要登录才能访问
   Widget routerEntry(PWBRouteParam param);
 }

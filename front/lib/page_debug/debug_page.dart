@@ -4,14 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:workbench/Foundations/foundations.dart';
 import 'package:workbench/app.dart';
 
-import '../skeleton/pages/main_page.dart';
+import '../page_main/main_page.dart';
+import 'debug_demo_page.dart';
+import 'debug_entry_page.dart';
 
 class DebugPageConfig extends RouterPageConfig {
 
   static const tag = "/debug";
 
+
   @override
   String get routerPath => tag;
+
+  @override
+  String get title => "Console";
 
   @override
   Widget routerEntry(PWBRouteParam param) {
@@ -36,8 +42,8 @@ class _DebugPageState extends State<_DebugPage> {
   void initState() {
     super.initState();
 
-    itemHelper.addBodyChangeItem("导航", Container(color: Colors.blue,));
-    itemHelper.addBodyChangeItem("导航", Container(color: Colors.amber,));
+    itemHelper.addBodyChangeItem("入口", const DebugEntryPage());
+    itemHelper.addBodyChangeItem("组件", const DebugDemoPage());
     itemHelper.addBodyChangeItem("导航", Container(color: Colors.amberAccent,));
     itemHelper.addBodyChangeItem("导航", Container(color: Colors.amber,));
     itemHelper.addBodyChangeItem("导航", Container(color: Colors.amberAccent,));

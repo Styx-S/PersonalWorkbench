@@ -1,0 +1,13 @@
+syntax = "proto3";
+package auth;
+
+import "base/request.proto";
+
+message LoginReq {
+    optional string name = 1;
+    optional string password = 2;
+}
+
+message LoginRsp {
+    optional base.PWBToken token = 2;
+}

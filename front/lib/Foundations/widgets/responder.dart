@@ -76,7 +76,7 @@ class _PWBResponderState extends State<PWBResponder> {
   ValueNotifier<PWBResponderState> currState = ValueNotifier<PWBResponderState>(PWBResponderState.normal);
 
   void onStateChange(PWBResponderState next) {
-    if (next == currState) {
+    if (next == currState.value) {
       return;
     }
     currState.value = next;
@@ -90,7 +90,7 @@ class _PWBResponderState extends State<PWBResponder> {
       cursor: widget.hoverable ? SystemMouseCursors.click : MouseCursor.defer,
       child: GestureDetector(
         onTapUp: (_) => onStateChange(PWBResponderState.normal),
-        onTapDown: (_) => onStateChange(PWBResponderState.press),
+        onTapDown: widget.clickable ? (_) => onStateChange(PWBResponderState.press) : null,
         onTap: widget.clickable ? widget.onTap : null,
         child: ValueListenableBuilder(
           valueListenable: currState,

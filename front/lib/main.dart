@@ -1,9 +1,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:workbench/skeleton/logic/config/global_site_model.dart';
+import 'package:workbench/global_logic/global/global_site_model.dart';
 import 'package:workbench/page_debug/debug_page.dart';
-import 'package:workbench/skeleton/pages/main_page.dart';
+import 'package:workbench/page_main/main_page.dart';
+import 'package:workbench/page_utils/utils_page.dart';
 import 'package:workbench/skeleton/pages/not_found_page.dart';
 import 'Foundations/foundations.dart';
 import 'app.dart';
@@ -42,6 +43,7 @@ class _AppState extends State<App> {
       NotFoundPageConfig(),
       MainPageConfig(),
       DebugPageConfig(),
+      UtilsPageConfig(),
     ];
     for (final config in routerConfigs) {
       RouterDefine.getDefine().registerRoute(config.routerPath, config);

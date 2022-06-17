@@ -1,0 +1,31 @@
+syntax = "proto3";
+package base;
+
+message PWBRequest {
+    optional uint64 request_time = 1;   // 请求时间
+    optional uint64 request_seq = 2;    // 请求序列
+    optional PWBToken auth_token = 99;      // 登录态
+    optional bytes requset_payload = 100;   // 请求内容
+}
+
+message PWBResponse {
+    optional uint64 response_time = 1;      // 响应输出时间
+    optional uint64 response_seq = 2;       // 和请求序列一致
+    optional PWBError transport_error = 10;  // 传输层错误码（终端本地根据通道填）
+    optional PWBError business_error = 11;   // 业务错误
+
+    optional bytes response_payload = 100;   // 响应内容
+}
+
+message PWBError {
+    optional uint32 err_code = 1;
+    optional string err_msg = 2;
+}
+
+message PWBToken {
+    enum TokenType {
+        Id = 0;
+    }
+    optional TokenType type = 1;
+    optional string id = 2;
+}

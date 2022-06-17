@@ -3,8 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:workbench/Foundations/foundations.dart';
-import 'package:workbench/Foundations/widgets/button.dart';
-import 'package:workbench/skeleton/logic/account/global_account_model.dart';
+import 'package:workbench/global_logic/global/global_account_model.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -15,6 +14,9 @@ class LoginPage extends ConsumerStatefulWidget {
 }
 
 class _LoginPageState extends ConsumerState<LoginPage> {
+
+  final loginController = LoginWidgetController();
+
   @override
   Widget build(BuildContext context) {
     return PageSkeleton(
@@ -30,9 +32,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   Positioned(
                     right: 160,
                       child: LoginWidget(
+                        controller: loginController,
                         actions: [
                           LoginAction(title: "登录", onTap: (){
-                            ref.read(GlobalAccountModel.provider).login();
+                            ref.read(GlobalAccountModel.provider).login(loginController.username, loginController.password);
                           })
                         ],
                       ))
@@ -90,22 +93,41 @@ class _LoginWidgetState extends State<LoginWidget> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(context) {
+
+    // 每行输入框期望长度对齐
+    final List<String> titles = ["用户名", "密码"];
+    const titleStyle = TextStyle(
+      fontSize: 24,
+      fontWeight: FontWeight.w700,
+    );
+    // 第一次启动的时候会触发两次build，计算出来的宽度会变，不知道为啥
+    // final Iterable<double> titleWidths = titles.map((e) => StringUtils.getTextSize(e, titleStyle, maxLines: 1).width);
+    // var suitableTitleWidth = titleWidths.first;
+    // const spaceBtwTitleAndContent = 20;
+    // for (final w in titleWidths) {
+    //   if (w + spaceBtwTitleAndContent > suitableTitleWidth) {
+    //     suitableTitleWidth = w + spaceBtwTitleAndContent;
+    //   }
+    // }
+    const suitableTitleWidth = 92.0;
+
+
     return Container(
       width: widget.width,
-      height: 300,
       decoration: BoxDecoration(
         color: context.colors.backgroundColor,
         borderRadius: const BorderRadius.all(Radius.circular(4)),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.only(left: 40, right: 40, top: 60, bottom: 40),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            buildInputRow(context, "用户名"),
+            buildInputRow(context, titleWidth: suitableTitleWidth, title: titles[0], controller: controller._usernameController),
             const SizedBox(height: 20,),
-            buildInputRow(context, "密码"),
-            const SizedBox(height: 28,),
+            buildInputRow(context, titleWidth: suitableTitleWidth, title: titles[1], controller: controller._passwordController, isPassword: true),
+            const SizedBox(height: 36,),
             if (widget.actions != null)
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -113,6 +135,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                 ...List.generate(widget.actions!.length, (index) {
                   final action = widget.actions![index];
                   return PWBButton(
+                    width: actionButtonWidth(),
                     title: action.title,
                     onTap: action.onTap,
                   );
@@ -125,14 +148,34 @@ class _LoginWidgetState extends State<LoginWidget> {
     );
   }
 
-  Widget buildInputRow(BuildContext context, String title) {
+  Widget buildInputRow(BuildContext context, {
+    required double titleWidth,
+    required String title,
+    TextEditingController? controller,
+    bool isPassword = false,
+  }) {
     return Row(
       children: [
-        Text(title),
-        const SizedBox(width: 12,),
-        Expanded(child: TextField(maxLines: 1,),),
+        SizedBox(
+          width: titleWidth,
+          child: Text(title),
+        ),
+        Expanded(child: TextField(
+          obscureText: isPassword,
+          maxLines: 1,
+          controller: controller,
+          decoration: TextFieldUtils.makeDecoration(),
+        ),),
       ],
     );
+  }
+
+  double? actionButtonWidth() {
+    final num = widget.actions?.length ?? 0;
+    if (num == 1) {
+      return 400;
+    }
+    return null;
   }
 
 }

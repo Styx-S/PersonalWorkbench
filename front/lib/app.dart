@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:workbench/skeleton/logic/account/global_account_model.dart';
+import 'package:workbench/global_logic/global/global_account_model.dart';
 import 'package:workbench/skeleton/pages/login_page.dart';
 
 import 'Foundations/foundations.dart';
@@ -68,15 +68,25 @@ class PWBRouterDelegate extends RouterDelegate<PWBRouteParam> {
     return Consumer(
         builder: (context, ref, child) {
           if (currentConfiguration == null) {
+            // 白屏时走这里
             return Container();
           }
+
           final pageConfig = currentConfiguration!.getConfig();
-          if (pageConfig.needLogin && !ref.watch(GlobalAccountModel.provider).isLogin) {
-            return const Scaffold(body: LoginPage());
+          final accountProvider = ref.watch(GlobalAccountModel.provider);
+          pageBuilder(context) {
+            if (pageConfig.needLogin && !accountProvider.isLogin) {
+              // 无登录态时出登录页
+              return const LoginPage();
+            } else {
+              return currentConfiguration!.getPage();
+            }
           }
-          return Scaffold(
-            body: currentConfiguration!.getPage(),
-          );
+
+          return Scaffold(body: Overlay(
+            initialEntries: [
+            OverlayEntry(builder: pageBuilder)
+          ],));
     });
 
   }
