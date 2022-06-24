@@ -42,11 +42,11 @@ class _DebugPageState extends State<_DebugPage> {
   void initState() {
     super.initState();
 
-    itemHelper.addBodyChangeItem("入口", const DebugEntryPage());
-    itemHelper.addBodyChangeItem("组件", const DebugDemoPage());
-    itemHelper.addBodyChangeItem("导航", Container(color: Colors.amberAccent,));
-    itemHelper.addBodyChangeItem("导航", Container(color: Colors.amber,));
-    itemHelper.addBodyChangeItem("导航", Container(color: Colors.amberAccent,));
+    itemHelper.addBodyChangeItem("入口", (context) => const DebugEntryPage());
+    itemHelper.addBodyChangeItem("组件", (context) => const DebugDemoPage());
+    itemHelper.addBodyChangeItem("导航", (context) => Container(color: Colors.amberAccent,));
+    itemHelper.addBodyChangeItem("导航", (context) => Container(color: Colors.amber,));
+    itemHelper.addBodyChangeItem("导航", (context) => Container(color: Colors.amberAccent,));
     itemHelper.notify = (){
       setState((){});
     };

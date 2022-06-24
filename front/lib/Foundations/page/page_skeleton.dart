@@ -176,7 +176,7 @@ class NavModel {
 class PageSkeletonItemHelper {
   final List<PWBNavigationItem> _items = [];
   int idx = 0;
-  Widget? currentSelectWidget;
+  WidgetBuilder? currentSelectWidget;
   List<PWBNavigationItem> get items {
     // 每次取的时候认为是设置到PageSkeleton上了，这个时候需要body不为空
     assert(currentSelectWidget != null);
@@ -189,16 +189,16 @@ class PageSkeletonItemHelper {
     _items.add(item);
   }
 
-  void addBodyChangeItem(String title, Widget body, {bool isDefault = false}) {
+  void addBodyChangeItem(String title, WidgetBuilder bodyBuilder, {bool isDefault = false}) {
     if (isDefault){
-      currentSelectWidget = body;
+      currentSelectWidget = bodyBuilder;
     }
-    currentSelectWidget ??= body;
+    currentSelectWidget ??= bodyBuilder;
     final item = PWBNavigationItem<int>(
         id: idx++,
         title: title,
         onSelect: (){
-          currentSelectWidget = body;
+          currentSelectWidget = bodyBuilder;
           notify?.call();
         }
     );
@@ -206,6 +206,6 @@ class PageSkeletonItemHelper {
   }
 
   Widget makeBody(BuildContext context) {
-    return currentSelectWidget ?? Container();
+    return currentSelectWidget?.call(context) ?? Container();
   }
 }

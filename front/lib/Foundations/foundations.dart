@@ -24,7 +24,7 @@ part './network/network_dispatcher.dart';
 
 part './page/navigation_bar.dart';
 part './page/page_skeleton.dart';
-part './page/title_page.dart';
+part './page/pages.dart';
 
 part './router/router_define.dart';
 
